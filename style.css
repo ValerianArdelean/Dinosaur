@@ -1,0 +1,96 @@
+* {
+	border: 0;
+	margin: 0;
+	box-sizing: border-box;
+	background-color: #f7f7f7;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #444; /* Adjust for similar gray tone */
+
+}
+
+.flex {
+	display: flex;
+	-webkit-flex-wrap: wrap:
+}
+
+.fade {
+	opacity: 30%;
+}
+
+.center {
+	text-align: center;
+}
+
+header {
+	margin-top: 45px;
+}
+
+h1 {
+	font-size: 1.8em;
+	margin: 0.5em;
+}
+
+p {
+	font-size: 0.9em;
+	line-height: 1.4em;
+}
+
+body {
+	width: 650px;
+	margin: auto;
+}
+
+main {
+	height: 380px;
+}
+
+img {
+	border: 5px solid white;
+	border-color: white;
+	-webkit-border-radius: 100px;
+	border-radius: 100px; /* Standard border-radius */
+	float: left; /* Makes text wrap around the image */
+	margin-right: 25px; /* Adds space between image and text */
+	shape-outside: circle(); /* Ensures text wraps around the circular shape */
+}
+
+button {
+	padding: 5px 5px;
+	margin: 5px;
+	font-size: 10px;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #f0f0f0;
+}
+
+.buttons {
+	display: flex;
+	justify-content: flex-end; /* Pushes buttons to the right */
+	gap: 10px; /* Adds spacing between buttons */
+	padding: 10px;
+}
+
+#bottom {
+	height: 400px;
+	width: 648px;
+}
+
+.darkBack {
+	background-color: #efefef;
+}
+
+.halfs {
+	height: 300px;
+	width: 250px;
+	margin: auto;
+}
+#border {
+	height: 300px;
+	width: 250px;
+	border: 5px solid white;
+}
+
+
+
+
