@@ -73,7 +73,7 @@ button {
 
 #bottom {
 	height: 400px;
-	width: 648px;
+	width: inherit;
 }
 
 .darkBack {
@@ -91,6 +91,30 @@ button {
 	border: 5px solid white;
 }
 
+#statusMessage {
+	width: inherit;
+	height: 30px;
+	border: 1px solid red;
+}
 
+#game {
+	width: inherit;
+	height: auto;
+	border: 1px solid red;
+}
+
+.line {
+	height: 10px;
+	width: 650px;
+}
+
+.cell {
+	width: 10px;
+	height: 10px;
+}
+
+.red {
+	background-color: red;
+}
 
 
