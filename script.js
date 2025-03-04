@@ -1,15 +1,12 @@
 document.getElementById("btn1").addEventListener("click", function() {
 	const userInput = prompt("Enter name:");
-	if (userInput !== null && userInput.trim() !== "") {
-		this.textContent = userInput;
-	}
+	this.textContent = userInput;
 });
 
 function createCells () {
 	let grid = document.getElementById("game");
 	for (let i = 10; i < 35; ++i) {
 		let line = document.createElement("div");
-		line.id = `${i}`;
 		line.classList.add("flex", "line");
 		for (let j = 10; j < 75; ++j) {
 			let cell = document.createElement("div");
@@ -21,53 +18,55 @@ function createCells () {
 	}
 }
 
-createCells();
-
 let coordonates = [28, 20];
-let head = document.getElementById(`${coordonates[0]}${coordonates[1]}`);
-head.classList.add("red");
 
-function jump() {
-	let i = 0;
-	let goingUp = true;
-
-	let jumpInterval = setInterval(() => {
-		head.classList.remove("red");
-
-		// Determine movement direction
-		let newX = goingUp ? coordonates[0] - 1 : coordonates[0] + 1;
-		let newHead = document.getElementById(`${newX}${coordonates[1]}`);
-
-		// Stop if out of bounds or no valid cell
-		if (!newHead) {
-			clearInterval(jumpInterval);
-			return;
-		}
-
-		// Move head to new position
-		coordonates[0] = newX;
-		head = newHead;
-		head.classList.add("red");
-
-		++i;
-
-		// If we reach 10 steps, start falling down
-		if (i >= 10) {
-			goingUp = false;
-		}
-
-		// Stop movement after 20 steps (10 up + 10 down)
-		if (i >= 20) {
-			clearInterval(jumpInterval);
-		}
-	}, 30); // Smooth movement with delay
+function updateCoordonates(sign) {
+	coordonates[0] += parseInt(sign);
 }
 
+function selectCell(line, col) {
+	return document.getElementById(`${line}${col}`);
+}
 
-function handleKeyboardInputs() {
-	document.addEventListener('keydown', function(event) {
-		jump();
+function dino(status) {
+	const DINO_SHAPE = [
+		[0, 1], [0, 2], [1, 1], [1, 2], [2, 1],// head, neck
+		[2, -1], [3, -1], [3, 0], [3, 1], [3, 2], [4, 1], [4, 0], [4,-1],// body, tail, hand
+		[5, 1], [5, -1]//legs
+	];
+	DINO_SHAPE.forEach(([dx, dy]) => {
+		selectCell(coordonates[0] + dx, coordonates[1] + dy).classList[status]("red");
 	});
 }
 
-handleKeyboardInputs();
+function handleKeyboardInput() {
+	document.addEventListener('keydown', function(event) {
+		if (event.key === 'ArrowUp') {
+			const SPEEDS = [[15, 5], [30, 2], [50, 1]], SPEED = 0, STEP = 1;
+			let height = 0, direction = 1;
+			function startTimer(speed, steps, sign) {
+				let step = 0;
+				let timer = setInterval(function() {
+					dino("remove");
+					updateCoordonates(sign);
+					dino("add");
+					++step;
+					if (step == steps) {
+						clearInterval(timer);
+						height += direction;
+						if (height == 3) {
+							direction = -1;
+							height = 2;
+						}
+						startTimer(SPEEDS[height][SPEED], SPEEDS[height][STEP], -direction);
+					}
+				}, speed);
+			}
+			startTimer(SPEEDS[height][SPEED], SPEEDS[height][STEP], -direction);
+		}
+	});
+}
+
+createCells();
+dino("add");
+handleKeyboardInput();

@@ -94,13 +94,13 @@ button {
 #statusMessage {
 	width: inherit;
 	height: 30px;
-	border: 1px solid red;
+	/*border: 1px solid red;*/
 }
 
 #game {
 	width: inherit;
 	height: auto;
-	border: 1px solid red;
+
 }
 
 .line {
@@ -114,7 +114,7 @@ button {
 }
 
 .red {
-	background-color: red;
+	background-color: #696969;
 }
 
 
