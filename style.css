@@ -4,7 +4,7 @@
 	box-sizing: border-box;
 	background-color: #f7f7f7;
 	font-family: Arial, Helvetica, sans-serif;
-	color: #444; /* Adjust for similar gray tone */
+	color: #444;
 
 }
 
@@ -19,6 +19,10 @@
 
 .center {
 	text-align: center;
+}
+
+.right {
+	text-align: right;
 }
 
 header {
@@ -66,14 +70,19 @@ button {
 
 .buttons {
 	display: flex;
-	justify-content: flex-end; /* Pushes buttons to the right */
-	gap: 10px; /* Adds spacing between buttons */
-	padding: 10px;
+	justify-content: flex-end;
+	height: 50px;
+	-webkit-column-gap: 10px;
 }
 
 #bottom {
 	height: 400px;
 	width: inherit;
+}
+
+#restart {
+	height: 47px;
+	cursor: pointer;
 }
 
 .darkBack {
@@ -109,6 +118,7 @@ button {
 }
 
 .cell {
+	position: relative;
 	width: 10px;
 	height: 10px;
 }
@@ -117,4 +127,40 @@ button {
 	background-color: #696969;
 }
 
+.runway {
+  position: relative;
+}
+
+/* Top 10px long, 1px thick line */
+.runway::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 1px;
+  background: #696969;
+  top: 0; /* Positioned at the top */
+  left: 0;
+}
+
+/* Bottom 5px long, 1px thick line (aligned to the left) */
+.runway::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 1px;
+  background: #696969;
+  bottom: 0;
+  left: 0;
+}
+
+/* Middle 5px long, 1px thick line (aligned to the right) */
+.runway span {
+  position: absolute;
+  width: 2px;
+  height: 1px;
+  background: #696969;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
 

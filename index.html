@@ -19,10 +19,15 @@
 		</header>
 		<main>
 			<section role="group" aria-label="Button Controls" class="buttons">
-				<button id="btn1">name not set</button>
-				<button id="btn3">zoom</button>
+				<button id="btn1" onclick="handleButton(this);">name not set</button>
+				<div onclick="restart();">
+					<img id="restart" src="assets/restart.png"</img>
+				</div>
 			</section>
-			<h1 id="statusMessage" class="center"></h1>
+			<section class="buttons">
+				<div id="HighestScore" class="right"></div>
+				<div id="score" class="right"></div>
+			</section>
 			<div id="game"></div>
 		</main>
 		<footer>
