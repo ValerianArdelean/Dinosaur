@@ -1,9 +1,20 @@
+const MIN_HEIGHT = 10;
+const MAX_HEIGHT = 28;
+
+let game = {
+	grid : document.getElementById("game"),
+	jumps : 0,
+	timerInterval : 0,
+	elapsedTime : 0,
+	coordinates : [28, 22],
+	gameOver : false,
+	gameRunning : false
+}
+
 function handleButton(button) {
 	const userInput = prompt("Enter name:");
 	button.textContent = userInput;
 }
-
-let grid = document.getElementById("game");
 
 function createCells() {
 	for (let i = 10; i < 35; ++i) {
@@ -15,7 +26,7 @@ function createCells() {
 			cell.classList.add("cell");
 			line.appendChild(cell);
 		}
-		grid.appendChild(line);
+		game.grid.appendChild(line);
 	}
 }
 
@@ -26,40 +37,32 @@ function createGround() {
 		cell.appendChild(span);
 		cell.classList[status]("runway");
 	}
+	
 	for (let i = -8; i < 57; ++i) {
 		ground(33, 18 + i, "add");
 	}
 }
 
-let timerInterval;
-let elapsedTime = 0;
-
 function startTimer() {
 	const scoreElement = document.getElementById("score");
-	elapsedTime = 0;
+	game.elapsedTime = 0;
 
-	timerInterval = setInterval(() => {
-		elapsedTime++;
-		const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, '0');
-		const seconds = String(elapsedTime % 60).padStart(2, '0');
+	game.timerInterval = setInterval(() => {
+		++game.elapsedTime;
+		const minutes = String(Math.floor(game.elapsedTime / 60)).padStart(2, '0');
+		const seconds = String(game.elapsedTime % 60).padStart(2, '0');
 		scoreElement.innerText = `${minutes}:${seconds}`;
 	}, 1000);
 }
 
 function stopTimer() {
-	clearInterval(timerInterval);
+	clearInterval(game.timerInterval);
 }
 
-let coordinates = [28, 22];
-let gameOver = false;
-
-const MIN_HEIGHT = 10;
-const MAX_HEIGHT = 28;
-
 function updateCoordinates(sign) {
-	let newHeight = coordinates[0] + sign;
+	let newHeight = game.coordinates[0] + sign;
 	if (newHeight > MIN_HEIGHT && newHeight <= MAX_HEIGHT) {
-		coordinates[0] = newHeight;
+		game.coordinates[0] = newHeight;
 	}
 }
 
@@ -74,7 +77,7 @@ function updateDinoDisplay(status) {
 		[5, 1], [5, -1]//legs
 	];
 	DINO_SHAPE.forEach(([x, y]) => {
-		selectCell(coordinates[0] + x, coordinates[1] + y).classList[status]("red");
+		selectCell(game.coordinates[0] + x, game.coordinates[1] + y).classList[status]("red");
 	});
 }
 
@@ -153,7 +156,7 @@ function updateCactusDisplay(column, status, type) {
 		if (column - y > 10) {
 			let cell = selectCell(32 - x, column - y);
 			if (cell.classList.contains("red") && status == "add") {
-				gameOver = true;
+				game.gameOver = true;
 				gameO();
 				stopTimer();
 				document.getElementById("HighestScore").innerHTML = document.getElementById("score").innerHTML;
@@ -163,11 +166,9 @@ function updateCactusDisplay(column, status, type) {
 	});
 }
 
-let gameRunning = false;
-
 function startGame() {
-	if (!gameRunning) {
-		gameRunning = true;
+	if (!game.gameRunning) {
+		game.gameRunning = true;
 		setInterval(displayCactuses, 1100);
 		startTimer();
 	}
@@ -180,7 +181,7 @@ function displayCactuses() {
 		updateCactusDisplay(18 + j, "remove", noCactuses);
 		--j;
 		updateCactusDisplay(18 + j, "add", noCactuses);
-		if (gameOver) {
+		if (game.gameOver) {
 			clearInterval(cactus);
 			if (j <= -6) {
 				updateCactusDisplay(18 + j, "remove", noCactuses);
@@ -189,15 +190,14 @@ function displayCactuses() {
 	}, 30);
 }
 
-let jumps = 0;
 function handleKeyboardInput() {
 	document.addEventListener('keydown', function(event) {
 		if (event.key === 'ArrowUp') {
 			startGame();
-			if (jumps == 0) {
+			if (game.jumps == 0) {
 				jumpDino();
 			}
-			++jumps;
+			++game.jumps;
 		}
 	});
 }
@@ -223,8 +223,8 @@ function jumpDino() {
 				}
 				startTimer(VELOCITY[height][SPEED], VELOCITY[height][TIME], -direction);
 			}
-			if (coordinates[0] == 27 && direction == -1) {
-				jumps = 0;
+			if (game.coordinates[0] == 27 && direction == -1) {
+				game.jumps = 0;
 			}
 		}, speed);
 	}
@@ -232,12 +232,13 @@ function jumpDino() {
 }
 
 function restart() {
-	grid.innerHTML = "";
+	game.grid.innerHTML = "";
 	createCells();
 	createGround();
 	updateDinoDisplay("add");
-	gameOver = false;
-	elapsedTime = 0;
+	game.gameOver = false;
+	game.elapsedTime = 0;
+	game.timerInterval = 0;
 }
 
 createCells();
