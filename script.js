@@ -155,19 +155,13 @@ function updateCactusDisplay(column, status, type) {
 				game.gameOver = true;
 				gameOver();
 				stopTimer();
-				document.getElementById("HighestScore").innerHTML = document.getElementById("score").innerHTML;
+				if (game.scoreElement.innerText > document.getElementById("HighestScore").innerText) {
+					document.getElementById("HighestScore").innerText = game.scoreElement.innerText;
+				}
 			}
 			cell.classList[status]("red");
 		}
 	});
-}
-
-function startGame() {
-	if (!game.gameRunning) {
-		game.gameRunning = true;
-		setInterval(displayCactuses, 1100);
-		startTimer();
-	}
 }
 
 function displayCactuses() {
@@ -184,6 +178,21 @@ function displayCactuses() {
 			}
 		}
 	}, 30);
+}
+
+function startGame() {
+	if (!game.gameRunning) {
+		game.gameRunning = true;
+		//setInterval(displayCactuses, 1100);
+		let cactuses = setInterval(function () {
+			displayCactuses();
+			if (game.gameOver) {
+				clearInterval(cactuses);
+				return;
+			}
+		}, 1100);
+		startTimer();
+	}
 }
 
 function handleKeyboardInput() {
@@ -233,15 +242,16 @@ function restart() {
 	createGround();
 	updateDinoDisplay("add");
 	game.gameOver = false;
+	game.gameRunning = false;
 	game.elapsedTime = 0;
 	game.timerInterval = 0;
 	game.minutes = 0;
 	game.seconds = 0;
 	game.jumps = 0;
-	stopTimer();
 }
 
 createCells();
 createGround();
 updateDinoDisplay("add");
 handleKeyboardInput();
+
