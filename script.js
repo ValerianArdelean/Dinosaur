@@ -1,6 +1,7 @@
 const MIN_DINO_HEIGHT = 10;
 const MAX_DINO_HEIGHT = 28;
 const START_GRID = 10;
+const GROUND_FLOOR = 32;
 const GRID_HEIGHT = 34;
 const GRID_WIDTH = 74;
 
@@ -8,11 +9,8 @@ let game = {
 	grid : document.getElementById("game"),
 	dinoCoordinates : [28, 22],
 	jumps : 0,
-	timerInterval : 0,
-	elapsedTime : 0,
 	scoreElement : document.getElementById("score"),
-	minutes : 0,
-	seconds : 0,
+	time : {interval : 0, elapsed : 0, minutes : 0, seconds : 0},
 	gameOver : false,
 	gameRunning : false
 }
@@ -22,18 +20,16 @@ function handleButton(button) {
 }
 
 function startTimer() {
-	game.elapsedTime = 0;
+	const MINUTE_IN_SECONDS = 60;
+	const SECOND_IN_MILLISECONDS = 1000;
+	game.time.elapsed = 0;
 
-	game.timerInterval = setInterval(() => {
-		++game.elapsedTime;
-		game.minutes = String(Math.floor(game.elapsedTime / 60)).padStart(2, '0');
-		game.seconds = String(game.elapsedTime % 60).padStart(2, '0');
-		game.scoreElement.innerText = `${game.minutes}:${game.seconds}`;
-	}, 1000);
-}
-
-function stopTimer() {
-	clearInterval(game.timerInterval);
+	game.time.interval = setInterval(() => {
+		++game.time.elapsed;
+		game.time.minutes = String(Math.floor(game.time.elapsed / MINUTE_IN_SECONDS)).padStart(2, '0');
+		game.time.seconds = String(game.time.elapsed % MINUTE_IN_SECONDS).padStart(2, '0');
+		game.scoreElement.innerText = `${game.time.minutes}:${game.time.seconds}`;
+	}, SECOND_IN_MILLISECONDS);
 }
 
 function createCells() {
@@ -51,15 +47,15 @@ function createCells() {
 }
 
 function createGround() {
-	function ground(line, col, status) {
-		cell = selectCell(line, col);
-		span = document.createElement("span");
+	function createCell(line, col, status) {
+		let cell = selectCell(line, col);
+		let span = document.createElement("span");
 		cell.appendChild(span);
 		cell.classList[status]("runway");
 	}
 	
-	for (let i = -8; i < 57; ++i) {
-		ground(33, 18 + i, "add");
+	for (let i = START_GRID; i < GRID_WIDTH; ++i) {
+		createCell(GRID_HEIGHT - 1, i, "add");
 	}
 }
 
@@ -82,12 +78,12 @@ function updateDinoDisplay(status) {
 	];
 	
 	DINO_SHAPE.forEach(([x, y]) => {
-		selectCell(game.dinoCoordinates[0] + x, game.dinoCoordinates[1] + y).classList[status]("red");
+		selectCell(game.dinoCoordinates[0] + x, game.dinoCoordinates[1] + y).classList[status]("gray");
 	});
 }
 
 function gameOver() {
-	const SENTENCE_SHAPE = [
+	const GAME_OVER_SHAPE = [
 		// G
 		[18, 18], [18, 19], [18, 20], [18, 21], [18, 22], [18, 22],
 		[19, 18], [20, 18], [21, 18], [22, 18],
@@ -128,8 +124,8 @@ function gameOver() {
 		[21, 65], [22, 66],
 	];
 
-	SENTENCE_SHAPE.forEach(([x, y]) => {
-		selectCell(x, y).classList.add("red");
+	GAME_OVER_SHAPE.forEach(([x, y]) => {
+		selectCell(x, y).classList.add("gray");
 	});
 }
 
@@ -149,48 +145,45 @@ function updateCactusDisplay(column, status, type) {
 	]];
 
 	CACTUS_SHAPE[type].forEach(([x, y]) => {
-		if (column - y > 10) {
-			let cell = selectCell(32 - x, column - y);
-			if (cell.classList.contains("red") && status == "add") {
+		if (column - y > START_GRID) {
+			let cell = selectCell(GROUND_FLOOR - x, column - y);
+			if (cell.classList.contains("gray") && status == "add") {
 				game.gameOver = true;
 				gameOver();
-				stopTimer();
+				clearInterval(game.time.interval);
 				if (game.scoreElement.innerText > document.getElementById("HighestScore").innerText) {
 					document.getElementById("HighestScore").innerText = game.scoreElement.innerText;
 				}
 			}
-			cell.classList[status]("red");
+			cell.classList[status]("gray");
 		}
 	});
 }
 
 function displayCactuses() {
+	const SPEED = 30;
 	let noCactuses = Math.floor(Math.random() * 2) + 1;
-	let j = 54;
+	let cactusPos = GRID_WIDTH - 2;
 	let cactus = setInterval(function () {
-		updateCactusDisplay(18 + j, "remove", noCactuses);
-		--j;
-		updateCactusDisplay(18 + j, "add", noCactuses);
+		updateCactusDisplay(cactusPos, "remove", noCactuses);
+		--cactusPos;
+		updateCactusDisplay(cactusPos, "add", noCactuses);
 		if (game.gameOver) {
 			clearInterval(cactus);
-			if (j <= -6) {
-				updateCactusDisplay(18 + j, "remove", noCactuses);
-			}
 		}
-	}, 30);
+	}, SPEED);
 }
 
 function startGame() {
+	const RATE = 1100;
 	if (!game.gameRunning) {
 		game.gameRunning = true;
-		//setInterval(displayCactuses, 1100);
 		let cactuses = setInterval(function () {
 			displayCactuses();
 			if (game.gameOver) {
 				clearInterval(cactuses);
-				return;
 			}
-		}, 1100);
+		}, RATE);
 		startTimer();
 	}
 }
@@ -211,6 +204,7 @@ function jumpDino() {
 	const VELOCITY = [[15, 10], [30, 2], [50, 1]];
 	const SPEED = 0;
 	const TIME = 1;
+	const MAX_HEIGHT = 3;
 	let height = 0, direction = 1;
 	function startTimer(speed, steps, sign) {
 		let step = 0;
@@ -222,13 +216,13 @@ function jumpDino() {
 			if (step == steps) {
 				clearInterval(timer);
 				height += direction;
-				if (height == 3) {
+				if (height == MAX_HEIGHT) {
 					direction = -1;
 					height = 2;
 				}
 				startTimer(VELOCITY[height][SPEED], VELOCITY[height][TIME], -direction);
 			}
-			if (game.dinoCoordinates[0] == 27 && direction == -1) {
+			if (game.dinoCoordinates[0] == MAX_DINO_HEIGHT - 1 && direction == -1) {
 				game.jumps = 0;
 			}
 		}, speed);
@@ -243,15 +237,11 @@ function restart() {
 	updateDinoDisplay("add");
 	game.gameOver = false;
 	game.gameRunning = false;
-	game.elapsedTime = 0;
-	game.timerInterval = 0;
-	game.minutes = 0;
-	game.seconds = 0;
-	game.jumps = 0;
+	game.time.minutes = 0;
+	game.time.seconds = 0;
 }
 
 createCells();
 createGround();
 updateDinoDisplay("add");
 handleKeyboardInput();
-
