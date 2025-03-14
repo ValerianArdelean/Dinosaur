@@ -7,21 +7,13 @@
 	color: #444;
 }
 
-.flex {
-	display: flex;
-	-webkit-flex-wrap: wrap:
+body {
+	width: 650px;
+	margin: auto;
 }
 
-.fade {
-	opacity: 30%;
-}
-
-.center {
-	text-align: center;
-}
-
-.right {
-	text-align: right;
+main {
+	height: 380px;
 }
 
 header {
@@ -36,15 +28,6 @@ h1 {
 p {
 	font-size: 0.9em;
 	line-height: 1.4em;
-}
-
-body {
-	width: 650px;
-	margin: auto;
-}
-
-main {
-	height: 380px;
 }
 
 img {
@@ -67,13 +50,6 @@ button {
 	background-color: #f0f0f0;
 }
 
-.buttons {
-	display: flex;
-	justify-content: flex-end;
-	height: 50px;
-	-webkit-column-gap: 10px;
-}
-
 #bottom {
 	height: 400px;
 	width: inherit;
@@ -84,15 +60,6 @@ button {
 	cursor: pointer;
 }
 
-.darkBack {
-	background-color: #efefef;
-}
-
-.halfs {
-	height: 300px;
-	width: 250px;
-	margin: auto;
-}
 #border {
 	height: 300px;
 	width: 250px;
@@ -102,13 +69,47 @@ button {
 #statusMessage {
 	width: inherit;
 	height: 30px;
-	/*border: 1px solid red;*/
 }
 
 #game {
 	width: inherit;
 	height: auto;
+}
 
+.flex {
+	display: flex;
+}
+
+.wrap {
+	-webkit-flex-wrap: wrap:
+}
+
+.fade {
+	opacity: 30%;
+}
+
+.center {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}
+
+.buttons {
+	justify-content: flex-end;
+	height: 50px;
+	-webkit-column-gap: 10px;
+}
+
+.halfs {
+	height: 300px;
+	width: 250px;
+	margin: auto;
+}
+
+.darkBack {
+	background-color: #efefef;
 }
 
 .line {
@@ -116,8 +117,11 @@ button {
 	width: 650px;
 }
 
-.cell {
+.relative {
 	position: relative;
+}
+
+.cell {
 	width: 10px;
 	height: 10px;
 }
@@ -126,40 +130,32 @@ button {
 	background-color: #696969;
 }
 
-.runway {
-  position: relative;
-}
-
-/* Top 10px long, 1px thick line */
 .runway::before {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 1px;
-  background: #696969;
-  top: 0; /* Positioned at the top */
-  left: 0;
+	content: "";
+	position: absolute;
+	width: 10px;
+	height: 1px;
+	background: #696969;
+	top: 0; /* Positioned at the top */
+	left: 0;
 }
 
-/* Bottom 5px long, 1px thick line (aligned to the left) */
 .runway::after {
-  content: "";
-  position: absolute;
-  width: 5px;
-  height: 1px;
-  background: #696969;
-  bottom: 0;
-  left: 0;
+	content: "";
+	position: absolute;
+	width: 5px;
+	height: 1px;
+	background: #696969;
+	bottom: 0;
+	left: 0;
 }
 
-/* Middle 5px long, 1px thick line (aligned to the right) */
 .runway span {
-  position: absolute;
-  width: 2px;
-  height: 1px;
-  background: #696969;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+	position: absolute;
+	width: 2px;
+	height: 1px;
+	background: #696969;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
 }
-

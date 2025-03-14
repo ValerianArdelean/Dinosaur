@@ -18,14 +18,14 @@
 		</header>
 		<main>
 			
-			<section role="group" aria-label="Button Controls" class="buttons">
+			<section role="group" aria-label="Button Controls" class="buttons flex">
 				<button id="btn1" onclick="handleButton(this);">name not set</button>
 				<div onclick="restart();">
 					<img id="restart" src="assets/restart.png"</img>
 				</div>
 			</section>
 			
-			<section class="buttons">
+			<section class="buttons flex">
 				<div id="HighestScore" class="right"></div>
 				<div id="score" class="right"></div>
 			</section>
@@ -34,7 +34,7 @@
 		</main>
 		<footer>
 			
-			<section id="bottom" class="flex darkBack">
+			<section id="bottom" class="flex wrap darkBack">
 				<div class="halfs darkBack">
 					<p class="center darkBack">TOP SCORES OF THE DAY</p>
 					<div id="border" class="darkBack"></div>

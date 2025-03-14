@@ -35,11 +35,11 @@ function startTimer() {
 function createCells() {
 	for (let i = START_GRID; i <= GRID_HEIGHT; ++i) {
 		let line = document.createElement("div");
-		line.classList.add("flex", "line");
+		line.classList.add("flex", "wrap", "line");
 		for (let j = START_GRID; j <= GRID_WIDTH; ++j) {
 			let cell = document.createElement("div");
 			cell.id = `${i}${j}`;
-			cell.classList.add("cell");
+			cell.classList.add("cell", "relative");
 			line.appendChild(cell);
 		}
 		game.grid.appendChild(line);
@@ -51,7 +51,7 @@ function createGround() {
 		let cell = selectCell(line, col);
 		let span = document.createElement("span");
 		cell.appendChild(span);
-		cell.classList[status]("runway");
+		cell.classList[status]("runway", "relative");
 	}
 	
 	for (let i = START_GRID; i < GRID_WIDTH; ++i) {
