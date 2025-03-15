@@ -81,7 +81,7 @@ button {
 }
 
 .wrap {
-	-webkit-flex-wrap: wrap:
+	-webkit-flex-wrap: wrap;
 }
 
 .fade {

@@ -25,7 +25,7 @@ const CACTUS_SHAPE = [[], [
 ]];
 const GAME_OVER_SHAPE = [
 	// G
-	[18, 18], [18, 19], [18, 20], [18, 21], [18, 22], [18, 22],
+	[18, 18], [18, 19], [18, 20], [18, 21], [18, 22],
 	[19, 18], [20, 18], [21, 18], [22, 18],
 	[22, 19], [22, 20], [22, 21], [22, 22],
 	[21, 22], [20, 22],
@@ -118,6 +118,12 @@ function createGround() {
 	}
 }
 
+function updateHighestTime() {
+	if (game.scoreElement.innerText > document.getElementById("HighestScore").innerText) {
+		document.getElementById("HighestScore").innerText = game.scoreElement.innerText;
+	}
+}
+
 function updateCoordinates(sign) {
 	let newHeight = game.dinoHeight + sign;
 	if (newHeight > MIN_DINO_HEIGHT && newHeight <= MAX_DINO_HEIGHT) {
@@ -129,10 +135,15 @@ function selectCell(line, col) {
 	return document.getElementById(`${line}${col}`);
 }
 
-function toogleCells(status, shape, line, col) {
+function toggleCells(status, shape, line, col) {
 	shape.forEach(([x, y]) => {
 		selectCell(line + x, col + y).classList[status]("gray");
 	});
+}
+
+function gameOver() {
+	game.gameOver = true;
+	toggleCells("add", GAME_OVER_SHAPE, 0, 0);
 }
 
 function updateCactusDisplay(column, status, type, shape) {
@@ -140,12 +151,9 @@ function updateCactusDisplay(column, status, type, shape) {
 		if (column - y > START_GRID) {
 			let cell = selectCell(GROUND_FLOOR - x, column - y);
 			if (cell.classList.contains("gray") && status == "add") {
-				game.gameOver = true;
-				toogleCells("add", GAME_OVER_SHAPE, 0, 0);
+				gameOver();
 				clearInterval(game.time.interval);
-				if (game.scoreElement.innerText > document.getElementById("HighestScore").innerText) {
-					document.getElementById("HighestScore").innerText = game.scoreElement.innerText;
-				}
+				updateHighestTime();
 			}
 			cell.classList[status]("gray");
 		}
@@ -201,9 +209,9 @@ function jumpDino() {
 	function startTimer(speed, steps, sign) {
 		let step = 0;
 		let timer = setInterval(function() {
-			toogleCells("remove", DINO_SHAPE, game.dinoHeight, DINO_POS);
+			toggleCells("remove", DINO_SHAPE, game.dinoHeight, DINO_POS);
 			updateCoordinates(sign);
-			toogleCells("add", DINO_SHAPE, game.dinoHeight, DINO_POS);
+			toggleCells("add", DINO_SHAPE, game.dinoHeight, DINO_POS);
 			++step;
 			if (step == steps) {
 				clearInterval(timer);
@@ -226,7 +234,7 @@ function restart() {
 	game.grid.innerHTML = "";
 	createCells();
 	createGround();
-	toogleCells("add", DINO_SHAPE, game.dinoHeight, DINO_POS);
+	toggleCells("add", DINO_SHAPE, game.dinoHeight, DINO_POS);
 	game.gameOver = false;
 	game.gameRunning = false;
 	game.time.minutes = 0;
@@ -235,5 +243,5 @@ function restart() {
 
 createCells();
 createGround();
-updateDinoDisplay("add", DINO_SHAPE);
+toggleCells("add", DINO_SHAPE, game.dinoHeight, DINO_POS);
 handleKeyboardInput();
