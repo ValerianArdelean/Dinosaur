@@ -10,8 +10,8 @@ The goal is to survive as long as possible while achieving a high score.
 ## How to Run
 <ul>
 To play the game:
-	<li> 1. Download the repository files. </li>
-	<li> 2. Open `index.html` in your preferred web browser. </li>
+	<li> Download the repository files. </li>
+	<li> Open `index.html` in your preferred web browser. </li>
 </ul>
 
 ## Controls
@@ -24,11 +24,11 @@ To play the game:
 
 ## Game Rules
 <ul>
-<li>The game starts when you press Arrow Up.</li>
-<li>The dinosaur automatically runs from left to right.</li>
-<li>Jump to avoid cactuses — hitting one ends the game.</li>
-<li>Your time survived is your score. Keep going to beat your record!</li>
-<li>If you lose, the game displays GAME OVER. Restart to try again.</li>
+	<li>The game starts when you press Arrow Up.</li>
+	<li>The dinosaur automatically runs from left to right.</li>
+	<li>Jump to avoid cactuses — hitting one ends the game.</li>
+	<li>Your time survived is your score. Keep going to beat your record!</li>
+	<li>If you lose, the game displays GAME OVER. Restart to try again.</li>
 <ul>
 
 ## License
